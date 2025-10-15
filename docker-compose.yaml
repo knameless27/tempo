@@ -1,0 +1,28 @@
+# docker-compose.yml
+version: '3.9'
+
+services:
+  backend:
+    build: ./tempo
+    container_name: django_app
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./data/sqlite:/app/db
+    environment:
+      - DJANGO_SETTINGS_MODULE=your_project.settings
+    depends_on:
+      - frontend
+
+  frontend:
+    build: ./tempo_front
+    container_name: nuxt_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+
+volumes:
+  sqlite_data:
