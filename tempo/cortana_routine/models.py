@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework.exceptions import APIException
 import json
 from common.enums import Day
 
@@ -20,13 +21,13 @@ class Routine(models.Model):
         return json.loads(self._week_day)
 
     @week_day.setter
-    def types(self, value):
+    def week_day(self, value):
         if not isinstance(value, list):
-            raise ValueError("Week day had to be the correct day of the week!")
+            raise APIException("Week day had to be the correct day of the week!")
         valid_values = [choice.value for choice in Day]
         for v in value:
             if v not in valid_values:
-                raise ValueError(f"{v} is not a correct type of week day!")
+                raise APIException(f"{v} is not a correct type of week day!")
         self._week_day = json.dumps(value)
 
     def __str__(self):
